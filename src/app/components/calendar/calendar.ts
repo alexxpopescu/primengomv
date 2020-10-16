@@ -1044,21 +1044,13 @@ export class Calendar implements AfterViewInit,AfterViewChecked,OnInit,OnDestroy
     
     validateMinute(minute): boolean {
         let valid: boolean = true;
-        let valueDateString = this.value ? this.value.toDateString() : null;
-        
-        if(this.minDate && valueDateString && this.minDate.toDateString() === valueDateString) {
-            if(this.minDate.getMinutes() > minute) {
-                valid = false;
-            }
-        }
-        
-        if(this.maxDate && valueDateString && this.maxDate.toDateString() === valueDateString) {
-            if(this.maxDate.getMinutes() < minute) {
-                valid = false;
-            }
-        }
-        
-        return valid;
+		let value = this.value; 
+		if (this.isRangeSelection()) { value = this.value[1] || this.value[0]; } 
+		if (this.isMultipleSelection()) { value = this.value[this.value.length - 1]; } 
+		
+		let hour = value.getHours(); 
+		let valueDateString = value ? value.toDateString() : null; 
+		if (this.minDate && valueDateString && this.minDate.toDateString() === valueDateString) { if(hour == this.minDate.getHours()){ if (this.minDate.getMinutes() > minute) { valid = false; } } } if (this.maxDate && valueDateString && this.maxDate.toDateString() === valueDateString) { if(hour == this.minDate.getHours()){ if (this.maxDate.getMinutes() < minute) { valid = false; } } } return valid;
     }
     
     incrementSecond(event) {
